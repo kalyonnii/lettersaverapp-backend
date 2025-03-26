@@ -1,0 +1,23 @@
+{
+  "name": "letter-saver-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "google-auth-library": "^7.10.0",
+    "googleapis": "^92.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^6.0.12",
+    "passport": "^0.5.0",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  }
+}
