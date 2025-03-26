@@ -13,7 +13,7 @@ exports.googleCallback = (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.redirect('http://localhost:4200/editor');
+      res.redirect(`${process.env.FRONTEND_URL}/editor`);
     });
   })(req, res, next);
 };
