@@ -62,7 +62,7 @@ exports.googleCallback = (req, res, next) => {
           console.error('Session Save Error:', err);
           return next(err);
         }
-        res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+        res.redirect(`${process.env.FRONTEND_URL}/#/dashboard`);
       });
     });
   })(req, res, next);
