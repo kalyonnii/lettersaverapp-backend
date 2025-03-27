@@ -151,7 +151,6 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const cors = require('cors');
-const path = require('path');
 require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -178,13 +177,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Serve Angular frontend
-app.use(express.static(path.join(__dirname, 'dist/letter-saver-app')));
-
-// Catch-all route for Angular
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/letter-saver-app/index.html'));
-});
 
 
 // ✅ MongoDB Connection
