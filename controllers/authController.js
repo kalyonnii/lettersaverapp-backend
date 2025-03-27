@@ -13,7 +13,10 @@ exports.googleCallback = (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+      const redirectUrl = new URL(process.env.FRONTEND_URL + '/dashboard');
+      console.log('Redirect URL:', redirectUrl.toString());
+      // Send redirect
+      res.redirect(redirectUrl.toString());
     });
   })(req, res, next);
 };
