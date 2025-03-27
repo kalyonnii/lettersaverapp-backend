@@ -156,7 +156,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const letterRoutes = require('./routes/letterRoutes');
 require('./config/passport');
-
+const path = require('path');
 const app = express();
 
 // Middleware
@@ -195,11 +195,20 @@ const connectDB = async () => {
 connectDB();
 
 
+// Serve Angular App
+const angularPath = path.join(__dirname, 'dist', 'letter-saver-app');
+app.use(express.static(angularPath));
+
 // Routes
 app.use('/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/letters', letterRoutes);
 
+
+// Catch-All Route for Angular
+app.get('*', (req, res) => {
+  res.sendFile(path.join(angularPath, 'index.html'));
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
