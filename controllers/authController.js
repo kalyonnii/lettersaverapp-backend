@@ -7,31 +7,63 @@ exports.googleAuth = passport.authenticate('google', {
   prompt: 'consent', // Force user account selection and consent screen
 });
 
-// Google Authentication Callback Handler
+// // Google Authentication Callback Handler
+// exports.googleCallback = (req, res, next) => {
+//   passport.authenticate('google', { failureRedirect: '/login' }, async (err, user) => {
+//     if (err) {
+//       console.error('Google Auth Error:', err);
+//       return res.redirect('/login');
+//     }
+
+//     if (!user) {
+//       console.warn('No user returned from Google authentication');
+//       return res.redirect('/login');
+//     }
+
+//     try {
+//       await new Promise((resolve, reject) => {
+//         req.login(user, (loginErr) => (loginErr ? reject(loginErr) : resolve()));
+//       });
+
+//       const redirectUrl = new URL(process.env.FRONTEND_URL + '/dashboard');
+//       console.log('Redirect URL:', redirectUrl.toString());
+//       // Send redirect
+//       return res.redirect(redirectUrl.toString());
+//     } catch (error) {
+//       console.error('Login Process Error:', error);
+//       return next(error);
+//     }
+//   })(req, res, next);
+// };
+
+
 exports.googleCallback = (req, res, next) => {
-  passport.authenticate('google', { failureRedirect: '/login' }, async (err, user) => {
+  passport.authenticate('google', { failureRedirect: '/login' }, (err, user) => {
     if (err) {
       console.error('Google Auth Error:', err);
       return res.redirect('/login');
     }
-
     if (!user) {
-      console.warn('No user returned from Google authentication');
+      console.error('User Not Found');
       return res.redirect('/login');
     }
 
-    try {
-      await new Promise((resolve, reject) => {
-        req.login(user, (loginErr) => (loginErr ? reject(loginErr) : resolve()));
-      });
+    req.login(user, (err) => {
+      if (err) {
+        console.error('Login Error:', err);
+        return next(err);
+      }
 
-      const redirectUrl = new URL(process.env.FRONTEND_URL + '/dashboard');
-      console.log('Redirect URL:', redirectUrl.toString());
-      // Send redirect
-      return res.redirect(redirectUrl.toString());
-    } catch (error) {
-      console.error('Login Process Error:', error);
-      return next(error);
-    }
+      console.log('User Authenticated:', user);
+      console.log('Redirecting to:', `${process.env.FRONTEND_URL}/dashboard`);
+
+      req.session.save((err) => {
+        if (err) {
+          console.error('Session Save Error:', err);
+          return next(err);
+        }
+        res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+      });
+    });
   })(req, res, next);
 };
