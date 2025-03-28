@@ -156,7 +156,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const letterRoutes = require('./routes/letterRoutes');
-
+const MongoStore = require('connect-mongo');
 const path = require('path');
 const app = express();
 
@@ -171,6 +171,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
   cookie: {
     secure: true, // Secure cookies in production
     httpOnly: true,
