@@ -146,6 +146,7 @@
 
 
 // server.js
+require('./config/passport');
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -155,7 +156,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const letterRoutes = require('./routes/letterRoutes');
-require('./config/passport');
+
 const path = require('path');
 const app = express();
 
@@ -172,7 +173,7 @@ app.use(session({
   cookie: {
     secure: true, // Secure cookies in production
     httpOnly: true,
-  sameSite: 'lax', // Use 'none' if cross-domain redirect is needed
+  sameSite: 'none', // Use 'none' if cross-domain redirect is needed
   maxAge: 24 * 60 * 60 * 1000
     // Allow cookies across origins
   }
