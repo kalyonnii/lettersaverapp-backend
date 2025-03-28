@@ -2,20 +2,26 @@
 
 // Get user information
 exports.getUser = (req, res) => {
-    try {
-        if (req.user) {
-            console.log("req.isAuthenticated()", req.isAuthenticated())
-            return res.status(200).json({
-                id: req.user.googleId,
-                name: req.user.name,
-                email: req.user.email
-            });
-        }
-        res.status(401).json({ message: 'Not authenticated' });
-    } catch (error) {
-        console.error("Error fetching user:", error);
-        res.status(500).json({ message: 'Internal server error' });
+    // try {
+    //     if (req.user) {
+    //         console.log("req.isAuthenticated()", req.isAuthenticated())
+    //         return res.status(200).json({
+    //             id: req.user.googleId,
+    //             name: req.user.name,
+    //             email: req.user.email
+    //         });
+    //     }
+    //     res.status(401).json({ message: 'Not authenticated' });
+    // } catch (error) {
+    //     console.error("Error fetching user:", error);
+    //     res.status(500).json({ message: 'Internal server error' });
+    // }
+
+    console.log('🧾 Authenticated User:', req.user);
+    if (!req.user) {
+        return res.status(401).send('Unauthorized');
     }
+    res.send(req.user);
 };
 
 // Force logout user
