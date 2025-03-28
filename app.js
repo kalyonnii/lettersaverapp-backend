@@ -174,8 +174,8 @@ app.use(session({
   cookie: {
     secure: true, // Secure cookies in production
     httpOnly: true,
-  sameSite: 'none', // Use 'none' if cross-domain redirect is needed
-  maxAge: 24 * 60 * 60 * 1000
+    sameSite: 'none', // Use 'none' if cross-domain redirect is needed
+    maxAge: 24 * 60 * 60 * 1000
     // Allow cookies across origins
   }
 }));

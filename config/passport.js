@@ -24,11 +24,14 @@ passport.use(new GoogleStrategy(
         await user.save();
       } else {
         // Update tokens if they have changed
-        if (accessToken !== user.accessToken || refreshToken !== user.refreshToken) {
-          user.accessToken = accessToken;
-          user.refreshToken = refreshToken;
-          await user.save();
+        const updatedFields = {};
+        if (accessToken !== user.accessToken) updatedFields.accessToken = accessToken;
+        if (refreshToken !== user.refreshToken) updatedFields.refreshToken = refreshToken;
+
+        if (Object.keys(updatedFields).length > 0) {
+          await User.updateOne({ _id: user._id }, { $set: updatedFields });
         }
+
       }
 
       return done(null, user);
@@ -45,10 +48,10 @@ passport.serializeUser((user, done) => {
 });
 
 // Retrieve user from session
-passport.deserializeUser(async (id, done) => {
-  console.log('🔄 Deserializing id:', id);
+passport.deserializeUser(async (user, done) => {
+  console.log('🔄 Deserializing id:', user);
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(user.id);
     console.log('🔄 Deserializing User:', user);
     done(null, user);
   } catch (err) {
