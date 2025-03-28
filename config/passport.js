@@ -44,7 +44,9 @@ passport.use(new GoogleStrategy(
 // Store user ID in session
 passport.serializeUser((user, done) => {
   console.log('👉 Serializing User:', user.id);
-  done(null, user.id);
+  process.nextTick(function() {
+    return cb(null, user.id);
+  });
 });
 
 // Retrieve user from session
