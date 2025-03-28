@@ -53,15 +53,16 @@ exports.googleCallback = (req, res, next) => {
         console.error('Login Error:', err);
         return next(err);
       }
-
       console.log('User Authenticated:', user);
+      console.log('Redirecting to dashboard');
       console.log('Redirecting to:', `${process.env.FRONTEND_URL}/dashboard`);
-
       req.session.save((err) => {
         if (err) {
           console.error('Session Save Error:', err);
           return next(err);
         }
+        console.log('Redirecting to:', `${process.env.FRONTEND_URL}/#/dashboard`);
+
         res.redirect(`${process.env.FRONTEND_URL}/#/dashboard`);
       });
     });
