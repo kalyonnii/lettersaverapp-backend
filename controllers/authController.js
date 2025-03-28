@@ -63,7 +63,12 @@ exports.googleCallback = (req, res, next) => {
         }
         console.log('Redirecting to:', `${process.env.FRONTEND_URL}/#/dashboard`);
 
-        res.redirect(`${process.env.FRONTEND_URL}/#/dashboard`);
+        // res.redirect(`${process.env.FRONTEND_URL}/#/dashboard`);
+        res.send(`
+          <script>
+            window.location.href = "${process.env.FRONTEND_URL}/#/dashboard";
+          </script>
+        `);
       });
     });
   })(req, res, next);
