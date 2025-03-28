@@ -165,6 +165,7 @@ app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:4200',
   credentials: true
 }));
+
 app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -181,6 +182,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+  console.log("Session Middleware: ", req.session);
+  console.log("User Middleware: ", req.user);
+  next();
+});
 
 
 // ✅ MongoDB Connection
