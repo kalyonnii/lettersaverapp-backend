@@ -164,7 +164,6 @@ app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:4200',
   credentials: true
 }));
-require('./config/passport');
 
 app.use(express.json());
 app.use(session({
@@ -181,6 +180,7 @@ app.use(session({
   }
 }));
 
+require('./config/passport');
 
 app.use(passport.initialize());
 app.use(passport.session());
