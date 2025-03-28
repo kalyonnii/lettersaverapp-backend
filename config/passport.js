@@ -38,17 +38,20 @@ passport.use(new GoogleStrategy(
     }
   }
 ));
-
+// Store user ID in session
 passport.serializeUser((user, done) => {
+  console.log('👉 Serializing User:', user.id);
   done(null, user.id);
 });
 
+// Retrieve user from session
 passport.deserializeUser(async (id, done) => {
+  console.log('🔄 Deserializing id:', id);
   try {
     const user = await User.findById(id);
-    console.log("Deserializing User:", user);
+    console.log('🔄 Deserializing User:', user);
     done(null, user);
   } catch (err) {
-    done(err);
+    done(err, null);
   }
 });
