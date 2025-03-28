@@ -45,7 +45,7 @@ passport.use(new GoogleStrategy(
 passport.serializeUser((user, done) => {
   console.log('👉 Serializing User:', user.id);
   process.nextTick(function() {
-    return cb(null, user.id);
+    return done(null, user.id);
   });
 });
 
