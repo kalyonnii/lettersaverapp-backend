@@ -38,7 +38,7 @@ exports.googleAuth = passport.authenticate('google', {
 
 
 exports.googleCallback = (req, res, next) => {
-  passport.authenticate('local', (err, user) => {
+  passport.authenticate('google', (err, user) => {
     if (err || !user) {
       return res.status(401).send('Login failed');
     }
