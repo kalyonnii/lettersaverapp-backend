@@ -172,7 +172,7 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === 'production', // Secure cookies in production
     httpOnly: true,
-  sameSite: 'lax', // Use 'none' if cross-domain redirect is needed
+  sameSite: None, // Use 'none' if cross-domain redirect is needed
   maxAge: 24 * 60 * 60 * 1000
     // Allow cookies across origins
   }

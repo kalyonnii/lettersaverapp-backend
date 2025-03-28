@@ -40,7 +40,7 @@ exports.googleAuth = passport.authenticate('google', {
 exports.googleCallback = (req, res, next) => {
   passport.authenticate('google', { failureRedirect: '/login' }, (err, user) => {
     if (err) {
-      console.error('Google Auth Error:', err);
+    console.error('Google Auth Error:', err);
       return res.redirect('/login');
     }
     if (!user) {
@@ -61,14 +61,9 @@ exports.googleCallback = (req, res, next) => {
           console.error('Session Save Error:', err);
           return next(err);
         }
-        console.log('Redirecting to:', `${process.env.FRONTEND_URL}/#/dashboard`);
-
-        // res.redirect(`${process.env.FRONTEND_URL}/#/dashboard`);
-        res.send(`
-          <script>
-            window.location.href = "${process.env.FRONTEND_URL}/#/dashboard";
-          </script>
-        `);
+      console.log('Redirecting to:', `${process.env.FRONTEND_URL}/#/dashboard`);
+      console.log('Session Data:', req.session);
+        res.redirect(`${process.env.FRONTEND_URL}/#/dashboard`);
       });
     });
   })(req, res, next);
