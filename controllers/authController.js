@@ -46,6 +46,7 @@ exports.googleCallback = (req, res, next) => {
       if (err) return next(err);
       req.session.save(() => {
         console.log('User logged in and session saved:', req.session);
+        console.log('User ', user);
         res.redirect(`${process.env.FRONTEND_URL}/#/dashboard`);
       });
     });
