@@ -38,32 +38,15 @@ exports.googleAuth = passport.authenticate('google', {
 
 
 exports.googleCallback = (req, res, next) => {
-  passport.authenticate('google', { failureRedirect: '/login' }, (err, user) => {
-    if (err) {
-    console.error('Google Auth Error:', err);
-      return res.redirect('/login');
+  passport.authenticate('local', (err, user) => {
+    if (err || !user) {
+      return res.status(401).send('Login failed');
     }
-    if (!user) {
-      console.error('User Not Found');
-      return res.redirect('/login');
-    }
-
-    req.login(user, (err) => {
-      if (err) {
-        console.error('Login Error:', err);
-        return next(err);
-      }
-      console.log('User Authenticated:', user);
-      console.log('Redirecting to dashboard');
-      console.log('Redirecting to:', `${process.env.FRONTEND_URL}/dashboard`);
-      req.session.save((err) => {
-        if (err) {
-          console.error('Session Save Error:', err);
-          return next(err);
-        }
-      console.log('Redirecting to:', `${process.env.FRONTEND_URL}/#/dashboard`);
-      console.log('Session Data:', req.session);
-        res.redirect(`${process.env.FRONTEND_URL}/#/dashboard`);
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      req.session.save(() => {
+        console.log('User logged in and session saved:', req.session);
+        res.redirect('/dashboard');
       });
     });
   })(req, res, next);

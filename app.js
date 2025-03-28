@@ -170,9 +170,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // Secure cookies in production
+    secure: true, // Secure cookies in production
     httpOnly: true,
-  sameSite: 'none', // Use 'none' if cross-domain redirect is needed
+  sameSite: 'lax', // Use 'none' if cross-domain redirect is needed
   maxAge: 24 * 60 * 60 * 1000
     // Allow cookies across origins
   }

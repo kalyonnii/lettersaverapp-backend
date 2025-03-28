@@ -4,6 +4,7 @@
 exports.getUser = (req, res) => {
     try {
         if (req.user) {
+            console.log("req.isAuthenticated()", req.isAuthenticated())
             return res.status(200).json({
                 id: req.user.googleId,
                 name: req.user.name,
