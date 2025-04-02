@@ -106,7 +106,7 @@ app.get('/auth/google/callback',
   (req, res) => {
     // console.log(req)
     // Successful authentication, redirect home.
-    res.redirect(`${process.env.FRONTEND_URL}/editor`);
+    res.redirect(`${process.env.FRONTEND_URL}/#/editor`);
   }
 );
 
