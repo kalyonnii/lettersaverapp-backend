@@ -4,9 +4,12 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 const letterRoutes = require('./routes/letterRoutes');
+<<<<<<< HEAD
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 
+=======
+>>>>>>> ef6d83e303ff689958dd433584f3903ad0d25788
 const cors = require('cors');
 require('dotenv').config();
 
@@ -14,7 +17,11 @@ const app = express();
 
 // Middleware
 app.use(cors({
+<<<<<<< HEAD
   origin: process.env.FRONTEND_URL || 'http://localhost:4200',
+=======
+  origin: `${process.env.FRONTEND_URL}`,
+>>>>>>> ef6d83e303ff689958dd433584f3903ad0d25788
   credentials: true
 }));
 app.use(express.json());
@@ -23,12 +30,18 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
+<<<<<<< HEAD
     secure: true, // Set to true for HTTPS
+=======
+    secure: false, // Set to true for HTTPS
+
+>>>>>>> ef6d83e303ff689958dd433584f3903ad0d25788
   }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+<<<<<<< HEAD
 // // MongoDB Connection
 // mongoose.connect(process.env.MONGODB_URI, {
 //   useNewUrlParser: true,
@@ -100,6 +113,117 @@ app.use('/auth', authRoutes);
 // });
 
 app.use('/api/user', userRoutes);
+=======
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+// User Model
+const User = mongoose.model('User', {
+  googleId: String,
+  email: String,
+  name: String,
+  accessToken: String,
+  refreshToken: String
+});
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: `${process.env.BACKEND_URL}/auth/google/callback` // Ensure it's correct!
+},
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      let user = await User.findOne({ googleId: profile.id });
+
+      if (!user) {
+        user = new User({
+          googleId: profile.id,
+          email: profile.emails[0].value,
+          name: profile.displayName,
+          accessToken,
+          refreshToken
+        });
+        await user.save();
+      } else {
+        user.accessToken = accessToken;
+        user.refreshToken = refreshToken;
+        await user.save();
+      }
+
+      return done(null, user);
+    } catch (error) {
+      return done(error);
+    }
+  }
+));
+
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    // console.log('Deserializing user with ID:', id);
+    const user = await User.findById(id);
+    // console.log('Deserialized user:', user);
+    done(null, user);
+  } catch (error) {
+    console.error('Deserialization error:', error);
+    done(error);
+  }
+});
+
+// Authentication Routes
+app.get('/auth/google',
+  passport.authenticate('google', {
+    scope: [
+      'profile',
+      'email',
+      'https://www.googleapis.com/auth/drive.file'
+    ]
+  })
+);
+
+app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    // console.log(req)
+    // Successful authentication, redirect home.
+    res.redirect(`${process.env.FRONTEND_URL}/#/editor`);
+  }
+);
+
+app.get('/api/user', (req, res) => {
+  if (req.user) {
+    res.json({
+      id: req.user.googleId,
+      name: req.user.name,
+      email: req.user.email
+    });
+  } else {
+    res.status(401).json({ message: 'Not authenticated' });
+  }
+});
+app.get('/api/user/logout', (req, res) => {
+  console.log("Force logout called");
+
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Session destroy error:", err);
+      return res.status(500).json({ message: "Logout failed" });
+    }
+    res.clearCookie('connect.sid');
+    res.status(200).json({ message: "Force logout successful" });
+  });
+});
+
+
+
+>>>>>>> ef6d83e303ff689958dd433584f3903ad0d25788
 app.use('/api/letters', letterRoutes);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
@@ -109,7 +233,11 @@ app.listen(PORT, () => {
 module.exports = app;
 
 
+<<<<<<< HEAD
 // server.js
+=======
+// // server.js
+>>>>>>> ef6d83e303ff689958dd433584f3903ad0d25788
 // const express = require('express');
 // const mongoose = require('mongoose');
 // const session = require('express-session');
@@ -123,7 +251,15 @@ module.exports = app;
 // const path = require('path');
 // const app = express();
 
+<<<<<<< HEAD
 
+=======
+// // Middleware
+// app.use(cors({
+//   origin: process.env.FRONTEND_URL || 'http://localhost:4200',
+//   credentials: true
+// }));
+>>>>>>> ef6d83e303ff689958dd433584f3903ad0d25788
 
 // app.use(express.json());
 // app.use(session({
@@ -141,6 +277,10 @@ module.exports = app;
 // }));
 
 // require('./config/passport');
+<<<<<<< HEAD
+=======
+
+>>>>>>> ef6d83e303ff689958dd433584f3903ad0d25788
 // app.use(passport.initialize());
 // app.use(passport.session());
 
