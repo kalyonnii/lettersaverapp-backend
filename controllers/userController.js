@@ -16,30 +16,45 @@ exports.getUser = (req, res) => {
     //     console.error("Error fetching user:", error);
     //     res.status(500).json({ message: 'Internal server error' });
     // }
+    if (req.user) {
+        res.json({
+          id: req.user.googleId,
+          name: req.user.name,
+          email: req.user.email
+        });
+      } else {
+        res.status(401).json({ message: 'Not authenticated' });
+      }
 
-    console.log('🧾 Authenticated User:', req.user);
-    if (!req.user) {
-        return res.status(401).send('Unauthorized');
-    }
-    res.send(req.user);
 };
 
 // Force logout user
 exports.logoutUser = (req, res) => {
-    try {
-        console.log("Force logout called");
+    // try {
+    //     console.log("Force logout called");
 
-        req.session.destroy((err) => {
-            if (err) {
-                console.error("Session destroy error:", err);
-                return res.status(500).json({ message: "Logout failed" });
-            }
+    //     req.session.destroy((err) => {
+    //         if (err) {
+    //             console.error("Session destroy error:", err);
+    //             return res.status(500).json({ message: "Logout failed" });
+    //         }
 
-            res.clearCookie('connect.sid', { path: '/' });
-            return res.status(200).json({ message: "Force logout successful" });
-        });
-    } catch (error) {
-        console.error("Error during logout:", error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
+    //         res.clearCookie('connect.sid', { path: '/' });
+    //         return res.status(200).json({ message: "Force logout successful" });
+    //     });
+    // } catch (error) {
+    //     console.error("Error during logout:", error);
+    //     res.status(500).json({ message: 'Internal server error' });
+    // }
+
+    console.log("Force logout called");
+
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Session destroy error:", err);
+            return res.status(500).json({ message: "Logout failed" });
+        }
+        res.clearCookie('connect.sid');
+        res.status(200).json({ message: "Force logout successful" });
+    });
 };
