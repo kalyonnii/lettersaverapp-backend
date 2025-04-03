@@ -105,6 +105,8 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
+  console.log('🚀 Inside deserializeUser');
+  console.log('🔹 Received ID:', id);
   try {
     console.log('Deserializing user with ID:', id);
     const user = await User.findById(id);

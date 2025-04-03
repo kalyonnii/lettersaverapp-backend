@@ -23,7 +23,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true, // Set to true for HTTPS
+    secure: false, // Set to true for HTTPS
   }
 }));
 app.use(passport.initialize());
